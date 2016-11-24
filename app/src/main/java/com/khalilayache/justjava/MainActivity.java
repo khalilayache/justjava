@@ -1,6 +1,7 @@
 package com.khalilayache.justjava;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,32 +36,32 @@ public class MainActivity extends AppCompatActivity {
         boolean isWhippedCream = whippedCreamCheck.isChecked();
         int coffeePrice = 5;
 
-        String whippedCream = "Não";
+        String whippedCream = getString(R.string.no);
         if (isWhippedCream) {
-            whippedCream = "Sim";
+            whippedCream = getString(R.string.yes);
             coffeePrice++;
         }
         boolean isChocolate = chocolateCheck.isChecked();
-        String chocolate = "Não";
+        String chocolate = getString(R.string.no);
         if (isChocolate) {
-            chocolate = "Sim";
-            coffeePrice++;
-            coffeePrice++;
+            chocolate = getString(R.string.yes);
+            coffeePrice = coffeePrice + 2;
         }
 
 
         String message;
         String subject;
         if (quantity > 0) {
-            message = "Name: " + nameEditText.getText().toString() +
-                    "\nAdicionou Whipped Cream? " + whippedCream +
-                    "\nAdicionou Chocolate? " + chocolate +
-                    "\nQuantidade: " + quantity +
-                    "\nTotal: " + NumberFormat.getCurrencyInstance().format(quantity * coffeePrice) +
-                    "\nThank You!";
+            message =  getString(R.string.name) + ": " + nameEditText.getText().toString() +
+                    "\n" + getString(R.string.add_whippedCream)+ " " + whippedCream +
+                    "\n" + getString(R.string.add_chocolate)+ " " + chocolate +
+                    "\n" + getString(R.string.quantity)+ " "+ quantity +
+                    "\n" + getString(R.string.total)+ " " + NumberFormat.getCurrencyInstance().format(quantity * coffeePrice) +
+                    "\n" + getString(R.string.thank_you);
 
-            subject = "Compra Just Java para " + nameEditText.getText().toString();
-            displayMessage(message, subject);
+            subject = getString(R.string.orde_to)+ " " + nameEditText.getText().toString();
+            String emailTo = "teste_de_email@justjava.com";
+            displayMessage(message, subject, emailTo);
         }
 
 
@@ -84,10 +85,10 @@ public class MainActivity extends AppCompatActivity {
             display(value + 1);
     }
 
-    private void displayMessage(String message,String subject) {
+    private void displayMessage(String message,String subject, String emailTo) {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setType("*/*");
-        intent.setData(Uri.parse("mailto:blabla@gmail.com"));
+        intent.setData(Uri.parse("mailto:" + emailTo));
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_TEXT, message);
         if(intent.resolveActivity(getPackageManager()) != null){
